@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
-        <id>ZipStorer</id>
+        <id>ZipStorer64</id>
         <version>3.5.0</version>
-        <authors>jaime-olivares</authors>
-        <description>A Pure C# class to store files in Zip</description>
+        <authors>jaime-olivares, usrsse2</authors>
+        <description>Fast managed library for working with ZIP archives</description>
         <language>en-US</language>
-        <projectUrl>http://github.com/usrsse2/zipstorer</projectUrl>
-        <licenseUrl>https://github.com/usrsse2/zipstorer/blob/master/LICENSE.md</licenseUrl>
+        <projectUrl>http://github.com/usr-sse2/zipstorer</projectUrl>
+        <licenseUrl>https://github.com/usr-sse2/zipstorer/blob/master/LICENSE.md</licenseUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <tags>zip unzip compress compression</tags>
         <frameworkAssemblies>

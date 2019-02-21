@@ -1,12 +1,11 @@
-# ZipStorer
-A Pure C# class for storing files in Zip format
+# ZipStorer64
+Fast managed library for working with ZIP archives. A fork of ZipStorer (https://github.com/jaime-olivares/zipstorer)
 
-[![NuGet](https://img.shields.io/nuget/v/ZipStorer.svg)](https://www.nuget.org/packages/ZipStorer/)
-[![github](https://img.shields.io/github/stars/jaime-olivares/zipstorer.svg)]()
+[![NuGet](https://img.shields.io/nuget/v/ZipStorer64.svg)](https://www.nuget.org/packages/ZipStorer64/)
 
 ## Introduction
 There are many techniques to produce Zip files in a .NET environment, like the following:
-
+* Using the *System.IO.Compression.ZipArchive* class
 * Using the *java.util.zip* namespace
 * Invoking Shell API features
 * Using a third-party .NET library
@@ -14,8 +13,6 @@ There are many techniques to produce Zip files in a .NET environment, like the f
 * Invoking a compression tool at command-line
 
 ZipStorer is a minimalistic class to create Zip files and store/retrieve files to/from it, by using the Deflate algorithm. No other compression methods supported.
-
-Notice that .NET 3.0 and up Frameworks come with the *ZipPackage* class, but it is not available for .NET 2.0 or Compact Framework applications. A restriction of *ZipPackage* is that you cannot avoid generating an extra file inside named *[Content_Type].xml*.
 
 ## Using the code
 The ZipStorer class is the unique one needed to create the zip file. It contains a nested structure *(ZipFileEntry)* for collecting each directory entry. The class has been declared inside the System.IO namespace. 
@@ -57,9 +54,6 @@ The second method allows adding data from any kind of stream object derived from
 
 Finally, it is required to close the storage with the *Close()* method. This will save the central directory information too. Alternatively, the *Dispose()* method can be used.
 
-## Sample application
-The provided sample application is a Winforms project. It will ask for files and store the path names in a *ListBox*, along with the operation type: creating or appending, and compression method. 
-
 ## Extracting stored files
 For extracting a file, the zip directory shall be read first, by using the *ReadCentralDir()* method, and then the *ExtractFile()* method, like in the following minimal sample code:
 
@@ -68,10 +62,10 @@ For extracting a file, the zip directory shall be read first, by using the *Read
 ZipStorer zip = ZipStorer.Open(@"c:\data\sample.zip", FileAccess.Read);
 
 // Read the central directory collection
-List<ZipStorer.ZipFileEntry> dir = zip.ReadCentralDir();
+List<ZipFileEntry> dir = zip.ReadCentralDir();
 
 // Look for the desired file
-foreach (ZipStorer.ZipFileEntry entry in dir)
+foreach (ZipFileEntry entry in dir)
 {
     if (Path.GetFileName(entry.FilenameInZip) == "sample.jpg")
     {
@@ -83,20 +77,6 @@ foreach (ZipStorer.ZipFileEntry entry in dir)
 zip.Close();
 ````
 
-## Removal of entries
-Removal of entries in a zip file is a resource-consuming task. The simplest way is to copy all non-removed files into a new zip storage. The *RemoveEntries()* static method will do this exactly and will construct the ZipStorer object again. For the sake of efficiency, *RemoveEntries()* will accept many entry references in a single call, as in the following example:
-
-````csharp
-List<ZipStorer.ZipFileEntry> removeList = new List<ZipStorer.ZipFileEntry>();
-
-foreach (object sel in listBox4.SelectedItems)
-{
-    removeList.Add((ZipStorer.ZipFileEntry)sel);
-}
-
-ZipStorer.RemoveEntries(ref zip, removeList);
-````
-
 ## File and stream usage
 The current release of ZipStorer supports both files and streams for creating and opening a zip storage. Several methods are overloaded for this dual support. The advantage of file-oriented methods is simplicity, since those methods will open or create files internally. On the other hand, stream-oriented methods are more flexible by allowing to manage zip storages in streams different than files. File-oriented methods will invoke internally to equivalent stream-oriented methods. Notice that not all streams will apply, because the library requires the streams to be randomly accessed (CanSeek = true). The RemoveEntries method will work only if the zip storage is a file.
 
@@ -106,13 +86,13 @@ The current release of ZipStorer supports both files and streams for creating an
     public static ZipStorer Open(string _filename, FileAccess _access)
     public void AddFile(Compression _method, string _pathname, string _filenameInZip, string _comment)
     public bool ExtractFile(ZipFileEntry _zfe, string _filename)
-    public static bool RemoveEntries(ref ZipStorer _zip, List<zipfileentry> _zfes)  // No stream-oriented equivalent
 
     // Stream-oriented methods:
     public static ZipStorer Create(Stream _stream, string _comment, bool _leaveOpen)
     public static ZipStorer Open(Stream _stream, FileAccess _access, bool _leaveOpen)
     public void AddStream(Compression _method, string _filenameInZip, Stream _source, DateTime _modTime, string _comment)
-    public bool ExtractFile(ZipFileEntry _zfe, Stream _stream)</zipfileentry>
+    public bool ExtractFile(ZipFileEntry _zfe, Stream _stream)
+    public Stream LoadFile(ZipFileEntry _zfe)
 
     // Async method (experimental):
     public async Task<bool> ExtractFileAsync(ZipFileEntry _zfe, Stream _stream)    
@@ -126,23 +106,14 @@ Traditionally, the ZIP format supported DOS encoding system (a.k.a. IBM Code Pag
 ZipStorer class detects UTF-8 encoding by reading the proper flag in each file's header information. For enforcing filenames to be encoded with UTF-8 system, set the *EncodeUTF8* member of ZipStorer class to true. All new filenames added will be encoded with UTF8. Notice this doesn't affect stored file contents at all. Also be aware that Windows Explorer's embedded Zip format facility does not recognize well the UTF-8 encoding system, as WinZip or WinRAR do.
 
 ## .Net Standard support
-Now ZipStorer supports .Net Standard 1.6 and hence a broad range of platforms. 
-
-If developing with Visual Studio Code, the `csproj` file must reference the [nuget package](https://www.nuget.org/packages/ZipStorer/):
-````xml
-  <ItemGroup>
-    <PackageReference Include="ZipStorer" Version="*" />
-  </ItemGroup>
-````
+Now ZipStorer supports .Net Standard 2.0 and hence a broad range of platforms. 
 
 ## Advantages and usage
 ZipStorer has the following advantages:
-
+* Unlike *System.IO.Compression.ZipArchive*, *ZipStorer* doesn't read the whole ZIP file into memory and write it back to disk when closing the archive. It writes all added files to the disk immediately, and keeps only the Central Directory records in memory.
+For example, *ZipArchive* requires 5 GB of memory and several minutes of time to add a 100 KB file to a 5 GB archive. *ZipStorer* performs the same task in 350 MB of memory and 10 seconds of time on the same computer.
 * It is a short and monolithic C# class that can be embedded as source code in any project (1 source file of 37K, 800+ lines)
-* No external libraries, no extra DLLs in application deployments
-* No Interop calls, increments portability to Mono and other non-Windows platforms
-* Can also be implemented with Mono, .NET Compact Framework and .Net Standard
-* Async method for extracting files (experimental)
-* Fast storing and extracting, because the code is simple and short
-* UTF8 Encoding support and ePUB compatibility
-* Available as a [nuget package](https://www.nuget.org/packages/ZipStorer/)
+* Async and stream methods for extracting files (experimental)
+* ZIP-64 support for working with archives larger than 4 GB or containing more than 65535 files
+* UTF8 Encoding support
+* Available as a [nuget package](https://www.nuget.org/packages/ZipStorer64/)
