@@ -5,7 +5,7 @@
     <AssemblyTitle>ZipStorer</AssemblyTitle>
     <VersionPrefix>3.4.0.0</VersionPrefix>
     <Authors>Jaime Olivares</Authors>
-    <TargetFramework>netstandard1.6</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
     <AssemblyName>ZipStorer</AssemblyName>
     <PackageId>netstandard</PackageId>
@@ -13,12 +13,18 @@
     <OutputType>Library</OutputType>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <LangVersion>Latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <LangVersion>Latest</LangVersion>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\src\zipstorer.cs" Exclude="bin\**;obj\**;**\*.xproj;packages\**" Link="ZipStorer.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Runtime" Version="*" />
+    <PackageReference Include="System.Runtime" Version="4.3.1" />
   </ItemGroup>
 
 </Project>

@@ -186,7 +186,7 @@ namespace ZipStorerTest
                 ZipStorer zip = ZipStorer.Open(TextStorage2.Text, FileAccess.Read);
 
                 // Read all directory contents
-                List<ZipStorer.ZipFileEntry> dir = zip.ReadCentralDir();
+                List<ZipStorer.ZipFileEntry> dir = new List<ZipStorer.ZipFileEntry>(zip.Files.Values);
                 this.listBox2.Items.Clear();
 
                 // Extract all files in target directory
@@ -230,38 +230,10 @@ namespace ZipStorerTest
                 ZipStorer zip = ZipStorer.Open(TextStorage4.Text, FileAccess.Read);
 
                 // Read all directory contents
-                List<ZipStorer.ZipFileEntry> dir = zip.ReadCentralDir();
+                List<ZipStorer.ZipFileEntry> dir = new List<ZipStorer.ZipFileEntry>(zip.Files.Values);
                 listBox4.Tag = zip;  // keep the zipstorer alive
 
                 listBox4.DataSource = dir;
-            }
-        }
-        private void ButtonProceed4_Click(object sender, EventArgs e)
-        {
-            List<ZipStorer.ZipFileEntry> removeList = new List<ZipStorer.ZipFileEntry>();
-
-            foreach (object sel in listBox4.SelectedItems)
-            {
-                removeList.Add((ZipStorer.ZipFileEntry)sel);
-            }
-
-            ZipStorer zip = listBox4.Tag as ZipStorer;
-            try
-            {
-                if (zip == null || !ZipStorer.RemoveEntries(ref zip, removeList))
-                {
-                    throw new Exception();
-                }
-                else
-                {
-                    MessageBox.Show("Zip file entries removed with success", "ZipStorer Demo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    listBox4.Tag = zip;
-                    listBox4.DataSource = zip.ReadCentralDir();
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Error while trying to remove entries from Zip file", "ZipStorer Demo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         #endregion

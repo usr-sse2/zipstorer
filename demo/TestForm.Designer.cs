@@ -54,7 +54,6 @@
             this.TextStorage2 = new System.Windows.Forms.TextBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.listBox4 = new System.Windows.Forms.ListBox();
-            this.ButtonProceed4 = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.ButtonBrowse4 = new System.Windows.Forms.Button();
@@ -346,7 +345,6 @@
             // tabPage4
             // 
             this.tabPage4.Controls.Add(this.listBox4);
-            this.tabPage4.Controls.Add(this.ButtonProceed4);
             this.tabPage4.Controls.Add(this.label11);
             this.tabPage4.Controls.Add(this.label12);
             this.tabPage4.Controls.Add(this.ButtonBrowse4);
@@ -369,18 +367,6 @@
             this.listBox4.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBox4.Size = new System.Drawing.Size(554, 229);
             this.listBox4.TabIndex = 13;
-            // 
-            // ButtonProceed4
-            // 
-            this.ButtonProceed4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ButtonProceed4.Location = new System.Drawing.Point(710, 265);
-            this.ButtonProceed4.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
-            this.ButtonProceed4.Name = "ButtonProceed4";
-            this.ButtonProceed4.Size = new System.Drawing.Size(140, 52);
-            this.ButtonProceed4.TabIndex = 14;
-            this.ButtonProceed4.Text = "Proceed";
-            this.ButtonProceed4.UseVisualStyleBackColor = true;
-            this.ButtonProceed4.Click += new System.EventHandler(this.ButtonProceed4_Click);
             // 
             // label11
             // 
@@ -473,7 +459,6 @@
         private System.Windows.Forms.CheckBox checkCompress;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.ListBox listBox4;
-        private System.Windows.Forms.Button ButtonProceed4;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Button ButtonBrowse4;
