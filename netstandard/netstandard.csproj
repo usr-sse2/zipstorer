@@ -3,8 +3,8 @@
   <PropertyGroup>
     <Description>Zipstorer</Description>
     <AssemblyTitle>ZipStorer</AssemblyTitle>
-    <VersionPrefix>3.4.0.0</VersionPrefix>
-    <Authors>Jaime Olivares</Authors>
+    <VersionPrefix>3.5.0.0</VersionPrefix>
+    <Authors>Jaime Olivares, usrsse2</Authors>
     <TargetFramework>netstandard2.0</TargetFramework>
     <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
     <AssemblyName>ZipStorer</AssemblyName>
