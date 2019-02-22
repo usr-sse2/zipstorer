@@ -50,31 +50,17 @@ public void AddStream(ZipStorer.Compress _method, string _filenameInZip, Stream 
     
 The first method allows adding an existing file to the storage. The first argument receives the compression method; it can be *Store* or *Deflate* enum values. The second argument admits the physical path name, the third one allows to change the path or file name to be stored in the Zip, and the last argument inserts a comment in the storage. Notice that the folder path in the *_pathname* argument is not saved in the Zip file. Use the *_filenameInZip* argument instead to specify the folder path and filename. It can be expressed with both slashes or backslashes.
 
-The second method allows adding data from any kind of stream object derived from the *System.IO.Stream class*. Internally, the first method opens a *FileStream* and calls the second method.
+The second method allows adding data from any kind of stream object derived from the *System.IO.Stream* class. Internally, the first method opens a *FileStream* and calls the second method.
 
 Finally, it is required to close the storage with the *Close()* method. This will save the central directory information too. Alternatively, the *Dispose()* method can be used.
 
 ## Extracting stored files
-For extracting a file, the zip directory shall be read first, by using the *ReadCentralDir()* method, and then the *ExtractFile()* method, like in the following minimal sample code:
+For extracting a file the *ExtractFile()* method method should be used, like in the following minimal sample code:
 
 ````csharp
-// Open an existing zip file for reading
-ZipStorer zip = ZipStorer.Open(@"c:\data\sample.zip", FileAccess.Read);
-
-// Read the central directory collection
-List<ZipFileEntry> dir = zip.ReadCentralDir();
-
-// Look for the desired file
-foreach (ZipFileEntry entry in dir)
-{
-    if (Path.GetFileName(entry.FilenameInZip) == "sample.jpg")
-    {
-        // File found, extract it
-        zip.ExtractFile(entry, @"c:\data\sample.jpg");
-        break;
-    }
-}
-zip.Close();
+using (var zip = ZipStorer.Open(@"c:\data\sample.zip", FileAccess.Read))
+    if (zip.Files.TryGetValue("sample.jpg", out var zfe))
+        zip.ExtractFile(zfe, @"C:\data\sample.jpg");
 ````
 
 ## File and stream usage
